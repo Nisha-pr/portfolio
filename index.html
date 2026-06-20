@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nisha — Full Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E1116;
+    --bg-soft:#151922;
+    --panel:#1A1F29;
+    --line:#2A303C;
+    --text:#E7E6E2;
+    --text-dim:#8B92A3;
+    --text-faint:#5A6273;
+    --cyan:#5EEAD4;
+    --amber:#F5B96B;
+    --magenta:#F08FC0;
+    --green:#9CDB6F;
+    --blue:#7FA8F5;
+    --mono:'JetBrains Mono', monospace;
+    --sans:'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--cyan);color:#0E1116;}
+
+  .wrap{max-width:980px;margin:0 auto;padding:0 28px;}
+
+  /* subtle code-pattern background texture */
+  .bg-glow{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(94,234,212,0.07), transparent 40%),
+      radial-gradient(circle at 85% 75%, rgba(240,143,192,0.06), transparent 45%);
+  }
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(14,17,22,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:64px;
+  }
+  .logo{
+    font-family:var(--mono);font-weight:700;font-size:15px;color:var(--text);
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);}
+  .navlinks{display:flex;gap:28px;font-family:var(--mono);font-size:13px;color:var(--text-dim);}
+  .navlinks a{transition:color .2s;}
+  .navlinks a:hover{color:var(--cyan);}
+  .navlinks span{color:var(--text-faint);}
+  @media(max-width:680px){.navlinks{display:none;}}
+
+  /* ===== HERO / TERMINAL ===== */
+  header{padding:80px 0 60px;}
+  .term{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    box-shadow:0 30px 80px -30px rgba(0,0,0,0.6);
+    overflow:hidden;
+  }
+  .term-bar{
+    display:flex;align-items:center;gap:8px;
+    padding:12px 16px;
+    background:var(--bg-soft);
+    border-bottom:1px solid var(--line);
+  }
+  .term-dot{width:11px;height:11px;border-radius:50%;}
+  .term-bar span:nth-child(1){background:#F08FC0;}
+  .term-bar span:nth-child(2){background:#F5B96B;}
+  .term-bar span:nth-child(3){background:#9CDB6F;}
+  .term-title{margin-left:8px;font-family:var(--mono);font-size:12px;color:var(--text-faint);}
+  .term-body{padding:30px 28px 36px;font-family:var(--mono);}
+  .term-line{display:flex;gap:10px;margin-bottom:10px;font-size:14px;}
+  .prompt-user{color:var(--green);}
+  .prompt-sep{color:var(--text-faint);}
+  .prompt-path{color:var(--blue);}
+  .cmd{color:var(--text);}
+  #typed-cmd::after{content:'';}
+  .cursor{display:inline-block;width:8px;height:16px;background:var(--cyan);margin-left:2px;vertical-align:middle;animation:blink 1s steps(1) infinite;}
+  @media (prefers-reduced-motion: reduce){.cursor{animation:none;}}
+  @keyframes blink{50%{opacity:0;}}
+
+  .hero-output{margin-top:18px;}
+  .hero-name{
+    font-family:var(--mono);
+    font-weight:800;
+    font-size:clamp(34px,6vw,58px);
+    line-height:1.05;
+    color:var(--text);
+  }
+  .hero-name .accent{color:var(--cyan);}
+  .hero-role{
+    margin-top:10px;font-size:16px;color:var(--text-dim);font-family:var(--mono);
+  }
+  .hero-role .tag{color:var(--amber);}
+  .hero-summary{
+    margin-top:18px;max-width:620px;color:var(--text-dim);font-size:15px;font-family:var(--sans);
+  }
+  .hero-tags{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;}
+  .hero-tags span{
+    font-family:var(--mono);font-size:12px;padding:5px 11px;
+    border:1px solid var(--line);border-radius:20px;color:var(--text-dim);
+  }
+  .hero-cta{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono);font-size:13px;font-weight:600;
+    padding:11px 20px;border-radius:7px;border:1px solid var(--line);
+    transition:all .2s;
+  }
+  .btn-primary{background:var(--cyan);color:#0E1116;border-color:var(--cyan);}
+  .btn-primary:hover{box-shadow:0 0 0 4px rgba(94,234,212,0.18);}
+  .btn-ghost{color:var(--text);}
+  .btn-ghost:hover{border-color:var(--text-dim);color:var(--cyan);}
+
+  /* ===== SECTION LABEL ===== */
+  .sec{padding:70px 0;}
+  .sec-head{margin-bottom:38px;}
+  .sec-eyebrow{
+    font-family:var(--mono);font-size:12px;color:var(--cyan);
+    display:flex;align-items:center;gap:10px;letter-spacing:.04em;
+  }
+  .sec-eyebrow::before{content:'//';color:var(--text-faint);}
+  .sec-title{font-family:var(--mono);font-weight:700;font-size:26px;margin-top:8px;color:var(--text);}
+  .sec-sub{color:var(--text-dim);font-size:14px;margin-top:6px;max-width:560px;}
+  .divider{border-top:1px dashed var(--line);}
+
+  /* ===== PROJECTS ===== */
+  .proj{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    margin-bottom:22px;overflow:hidden;
+    transition:border-color .2s, transform .2s;
+  }
+  .proj:hover{border-color:var(--text-faint);transform:translateY(-2px);}
+  .proj-tab{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:13px 20px;background:var(--bg-soft);border-bottom:1px solid var(--line);
+    font-family:var(--mono);font-size:12px;color:var(--text-faint);
+  }
+  .proj-tab .fname{color:var(--text-dim);}
+  .proj-body{padding:24px 26px 26px;}
+  .proj-name{font-family:var(--mono);font-weight:700;font-size:19px;color:var(--text);}
+  .proj-year{font-family:var(--mono);font-size:12px;color:var(--text-faint);margin-left:8px;}
+  .proj-desc{margin-top:10px;color:var(--text-dim);font-size:14.5px;max-width:680px;}
+  .proj-stack{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;}
+  .proj-stack span{
+    font-family:var(--mono);font-size:11.5px;padding:4px 10px;border-radius:5px;
+  }
+  .stack-react{background:rgba(127,168,245,0.12);color:var(--blue);}
+  .stack-node{background:rgba(156,219,111,0.12);color:var(--green);}
+  .stack-db{background:rgba(245,185,107,0.12);color:var(--amber);}
+  .stack-ai{background:rgba(240,143,192,0.12);color:var(--magenta);}
+  .stack-css{background:rgba(94,234,212,0.12);color:var(--cyan);}
+  .proj-links{margin-top:18px;display:flex;gap:14px;}
+  .proj-links a{
+    font-family:var(--mono);font-size:12.5px;color:var(--text-dim);
+    border-bottom:1px solid transparent;
+    display:flex;align-items:center;gap:6px;
+  }
+  .proj-links a:hover{color:var(--cyan);border-color:var(--cyan);}
+  .proj-diff{margin-top:16px;font-family:var(--mono);font-size:12.5px;color:var(--text-faint);}
+  .proj-diff .plus{color:var(--green);}
+
+  /* ===== SKILLS (package.json style) ===== */
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:680px){.skills-grid{grid-template-columns:1fr;}}
+  .skill-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px 22px;
+  }
+  .skill-key{font-family:var(--mono);font-size:13px;color:var(--magenta);margin-bottom:10px;}
+  .skill-vals{display:flex;flex-wrap:wrap;gap:8px;}
+  .skill-vals span{
+    font-family:var(--mono);font-size:12px;color:var(--text-dim);
+    border:1px solid var(--line);border-radius:5px;padding:4px 9px;
+  }
+
+  /* ===== EXPERIENCE / EDU TIMELINE ===== */
+  .tl-item{display:flex;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);}
+  .tl-item:last-child{border-bottom:none;}
+  .tl-mark{font-family:var(--mono);color:var(--text-faint);font-size:12px;padding-top:3px;min-width:90px;}
+  .tl-content h4{font-family:var(--mono);font-size:15.5px;color:var(--text);}
+  .tl-content .org{color:var(--cyan);font-family:var(--mono);font-size:13px;margin-top:2px;}
+  .tl-content p{color:var(--text-dim);font-size:14px;margin-top:8px;max-width:640px;}
+
+  /* ===== STATS STRIP ===== */
+  .stats{display:flex;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);}
+  .stat{flex:1;padding:22px 18px;text-align:center;border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat .num{font-family:var(--mono);font-weight:800;font-size:26px;color:var(--cyan);}
+  .stat .lab{font-family:var(--mono);font-size:11px;color:var(--text-faint);margin-top:4px;text-transform:uppercase;letter-spacing:.04em;}
+  @media(max-width:680px){.stats{flex-wrap:wrap;}.stat{flex:1 1 50%;border-bottom:1px solid var(--line);}}
+
+  /* ===== CERTS ===== */
+  .cert-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .cert{
+    font-family:var(--mono);font-size:13px;color:var(--text-dim);
+    border:1px solid var(--line);border-radius:8px;padding:12px 16px;flex:1 1 260px;
+  }
+  .cert b{color:var(--text);display:block;font-size:13.5px;margin-bottom:3px;}
+
+  /* ===== CONTACT / FOOTER ===== */
+  footer{padding:80px 0 50px;}
+  .contact-term{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:34px 30px;
+  }
+  .contact-term .l1{font-family:var(--mono);color:var(--text-faint);font-size:13px;}
+  .contact-term .l2{font-family:var(--mono);font-weight:700;font-size:22px;margin-top:10px;color:var(--text);}
+  .contact-list{margin-top:22px;display:flex;flex-direction:column;gap:10px;}
+  .contact-list a, .contact-list .row{
+    font-family:var(--mono);font-size:14px;color:var(--text-dim);display:flex;gap:10px;align-items:center;
+  }
+  .contact-list a:hover{color:var(--cyan);}
+  .contact-list .k{color:var(--amber);min-width:90px;}
+  .foot-note{margin-top:40px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text-faint);}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>nisha.dev</div>
+    <div class="navlinks">
+      <a href="#projects">projects</a>
+      <span>·</span>
+      <a href="#skills">skills</a>
+      <span>·</span>
+      <a href="#experience">experience</a>
+      <span>·</span>
+      <a href="#contact">contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="wrap">
+  <div class="term">
+    <div class="term-bar">
+      <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+      <span class="term-title">nisha@portfolio — zsh</span>
+    </div>
+    <div class="term-body">
+      <div class="term-line">
+        <span class="prompt-user">nisha</span><span class="prompt-sep">@portfolio</span>
+        <span class="prompt-path">~</span>
+        <span class="cmd">$ whoami<span class="cursor"></span></span>
+      </div>
+      <div class="hero-output">
+        <div class="hero-name">Nisha<span class="accent">.</span></div>
+        <div class="hero-role">&gt; <span class="tag">Full Stack Developer</span> — MERN · React · Node.js · MongoDB</div>
+        <p class="hero-summary">
+          B.Tech CSE graduate (2026, CGPA 8.19) who builds production-ready full-stack apps with REST APIs, JWT auth, and role-based access control. 400+ DSA problems solved across LeetCode and GeeksforGeeks. Also dabbles in AI/ML — trained a CNN that classifies 38 plant diseases at 92% accuracy.
+        </p>
+        <div class="hero-tags">
+          <span>Gorakhpur, Uttar Pradesh</span>
+          <span>Open to SDE roles</span>
+          <span>MERN Stack</span>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#projects">$ view projects</a>
+          <a class="btn btn-ghost" href="https://github.com/Nisha-pr" target="_blank" rel="noopener">github.com/Nisha-pr ↗</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/nisha-3496b0269/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a class="btn btn-ghost" href="mailto:nisha45688@gmail.com">$ say hello</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ===== STATS ===== -->
+<section class="sec wrap">
+  <div class="stats">
+    <div class="stat"><div class="num">8.19</div><div class="lab">CGPA</div></div>
+    <div class="stat"><div class="num">400+</div><div class="lab">DSA Problems Solved</div></div>
+    <div class="stat"><div class="num">5</div><div class="lab">Shipped Projects</div></div>
+    <div class="stat"><div class="num">92%</div><div class="lab">CNN Model Accuracy</div></div>
+  </div>
+</section>
+
+<!-- ===== PROJECTS ===== -->
+<section class="sec wrap" id="projects">
+  <div class="sec-head">
+    <div class="sec-eyebrow">projects</div>
+    <div class="sec-title">things I've shipped</div>
+    <div class="sec-sub">Full-stack platforms, an e-commerce front, and a deep-learning classifier — each pulled straight from <a href="https://github.com/Nisha-pr" target="_blank" rel="noopener" style="color:var(--cyan);">github.com/Nisha-pr</a>.</div>
+  </div>
+
+  <article class="proj">
+    <div class="proj-tab"><span>entreskill-hub<span class="fname">/README.md</span></span><span>2026</span></div>
+    <div class="proj-body">
+      <span class="proj-name">EntreSkill Hub</span><span class="proj-year">— flagship project</span>
+      <p class="proj-desc">A production-ready MERN platform serving three roles — User, Mentor, and Admin — that helps micro-entrepreneurs discover business ideas, follow structured roadmaps, and connect with mentors. Ships with real-time mentor chat and location-based community discovery.</p>
+      <div class="proj-diff"><span class="plus">+ 10 endpoints</span> · JWT auth · RBAC-protected routes · MongoDB Atlas · CI/CD on Vercel + Render</div>
+      <div class="proj-stack">
+        <span class="stack-react">React.js</span><span class="stack-node">Node.js / Express</span><span class="stack-db">MongoDB</span><span class="stack-db">JWT</span><span class="stack-css">Tailwind CSS</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/Nisha-pr/entreskill-hub" target="_blank" rel="noopener">↳ source</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="proj">
+    <div class="proj-tab"><span>ReWear<span class="fname">/README.md</span></span><span>2026</span></div>
+    <div class="proj-body">
+      <span class="proj-name">ReWear</span>
+      <p class="proj-desc">A sustainable clothing exchange marketplace. Users list pre-loved items, browse styles, and swap directly with each other — built around a community-driven exchange system instead of a simple buy/sell flow.</p>
+      <div class="proj-stack">
+        <span class="stack-react">React.js</span><span class="stack-node">Node.js / Express</span><span class="stack-db">MongoDB</span><span class="stack-db">JWT</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/Nisha-pr/ReWear" target="_blank" rel="noopener">↳ source</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="proj">
+    <div class="proj-tab"><span>plant-disease-recognition<span class="fname">/model.py</span></span><span>2026</span></div>
+    <div class="proj-body">
+      <span class="proj-name">Plant Disease Recognition System</span>
+      <p class="proj-desc">A CNN-based image classifier that identifies plant diseases from leaf photos across 38 disease classes, reaching 92% accuracy. Trained and evaluated with TensorFlow, Keras, and OpenCV.</p>
+      <div class="proj-diff"><span class="plus">+ 92% accuracy</span> · 38 classes · CNN architecture</div>
+      <div class="proj-stack">
+        <span class="stack-ai">Python</span><span class="stack-ai">TensorFlow</span><span class="stack-ai">Keras</span><span class="stack-ai">OpenCV</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/Nisha-pr/Plant-disease-Recognition-System" target="_blank" rel="noopener">↳ source</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="proj">
+    <div class="proj-tab"><span>ELECTROSHOP<span class="fname">/App.jsx</span></span><span>Sep 2025</span></div>
+    <div class="proj-body">
+      <span class="proj-name">Electroshop</span>
+      <p class="proj-desc">A responsive e-commerce storefront for electronics, built with a component-based React architecture, AOS scroll animations, and a Vite-optimized build pipeline.</p>
+      <div class="proj-stack">
+        <span class="stack-react">React.js</span><span class="stack-css">Vite</span><span class="stack-css">Tailwind CSS</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/Nisha-pr/ELECTROSHOP" target="_blank" rel="noopener">↳ source</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="proj">
+    <div class="proj-tab"><span>amazon-clone<span class="fname">/index.html</span></span><span>2024</span></div>
+    <div class="proj-body">
+      <span class="proj-name">Amazon Clone</span>
+      <p class="proj-desc">A fully responsive, pixel-perfect clone of the Amazon UI, built mobile-first with semantic HTML5 and CSS3 — an early project sharpening layout precision and responsive fundamentals.</p>
+      <div class="proj-stack">
+        <span class="stack-css">HTML5</span><span class="stack-css">CSS3</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/Nisha-pr?tab=repositories" target="_blank" rel="noopener">↳ view on GitHub</a>
+      </div>
+    </div>
+  </article>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ===== SKILLS ===== -->
+<section class="sec wrap" id="skills">
+  <div class="sec-head">
+    <div class="sec-eyebrow">stack</div>
+    <div class="sec-title">package.json</div>
+    <div class="sec-sub">The languages, frameworks, and tools behind the projects above.</div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-key">"languages"</div>
+      <div class="skill-vals"><span>Python</span><span>Java</span><span>C</span><span>C++</span><span>JavaScript (ES6+)</span></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-key">"frontend"</div>
+      <div class="skill-vals"><span>React.js</span><span>HTML5</span><span>CSS3</span><span>Tailwind CSS</span><span>Bootstrap</span><span>Vite</span></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-key">"backend_db"</div>
+      <div class="skill-vals"><span>Node.js</span><span>Express.js</span><span>REST API</span><span>JWT</span><span>MongoDB</span><span>Mongoose</span><span>Flask</span></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-key">"ai_ml"</div>
+      <div class="skill-vals"><span>TensorFlow</span><span>Keras</span><span>OpenCV</span><span>NumPy</span><span>CNN</span><span>Deep Learning</span></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-key">"tools"</div>
+      <div class="skill-vals"><span>Git</span><span>GitHub</span><span>Vercel</span><span>Render</span><span>Postman</span><span>VS Code</span><span>Linux</span></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-key">"coding_profiles"</div>
+      <div class="skill-vals"><span>LeetCode — 250+ solved</span><span>GeeksforGeeks — 150+ solved</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ===== EXPERIENCE ===== -->
+<section class="sec wrap" id="experience">
+  <div class="sec-head">
+    <div class="sec-eyebrow">experience</div>
+    <div class="sec-title">work & education</div>
+  </div>
+
+  <div class="tl-item">
+    <div class="tl-mark">Jun – Jul 2024</div>
+    <div class="tl-content">
+      <h4>Coding and Programming Trainee</h4>
+      <div class="org">Samsung Innovation Campus, Gorakhpur</div>
+      <p>Built hands-on C/C++ projects implementing core data structures — linked lists, stacks, queues, and sorting algorithms — while optimizing solutions for time and space complexity through algorithmic challenges.</p>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="tl-mark">2022 – 2026</div>
+    <div class="tl-content">
+      <h4>B.Tech, Computer Science and Engineering</h4>
+      <div class="org">Deen Dayal Upadhyay Gorakhpur University · CGPA 8.19</div>
+      <p>Graduating in 2026 with a strong foundation in data structures, algorithms, and full-stack web development.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ===== CERTIFICATIONS ===== -->
+<section class="sec wrap">
+  <div class="sec-head">
+    <div class="sec-eyebrow">certifications</div>
+    <div class="sec-title">credentials</div>
+  </div>
+  <div class="cert-row">
+    <div class="cert"><b>Full Stack Development</b>NoviTech R&D Pvt. Ltd.</div>
+    <div class="cert"><b>AI Masterclass</b>Pantech.ai</div>
+    <div class="cert"><b>Cyber Security</b>ISRO–IIRS</div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<footer class="wrap" id="contact">
+  <div class="contact-term">
+    <div class="l1">$ cat contact.txt</div>
+    <div class="l2">Let's build something together.</div>
+    <div class="contact-list">
+      <a href="mailto:nisha45688@gmail.com"><span class="k">email</span> nisha45688@gmail.com</a>
+      <div class="row"><span class="k">phone</span> +91-7081820282</div>
+      <a href="https://github.com/Nisha-pr" target="_blank" rel="noopener"><span class="k">github</span> github.com/Nisha-pr</a>
+      <a href="https://www.linkedin.com/in/nisha-3496b0269/" target="_blank" rel="noopener"><span class="k">linkedin</span> linkedin.com/in/nisha-3496b0269</a>
+      <div class="row"><span class="k">location</span> Gorakhpur, Uttar Pradesh, India</div>
+    </div>
+  </div>
+  <div class="foot-note">built with React-grade attention to detail, shipped as plain HTML · © 2026 Nisha</div>
+</footer>
+
+<script>
+  // typing effect for the hero "whoami" line — respects reduced motion
+  document.addEventListener('DOMContentLoaded', function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var el = document.querySelector('.cmd');
+    if(reduce || !el) return;
+    var full = "$ whoami";
+    el.innerHTML = '';
+    var i = 0;
+    var cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    function type(){
+      if(i <= full.length){
+        el.textContent = full.slice(0, i);
+        el.appendChild(cursor);
+        i++;
+        setTimeout(type, 70);
+      }
+    }
+    type();
+  });
+</script>
+
+</body>
+</html>
