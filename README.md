@@ -2,7 +2,7 @@
 
 A single-page, terminal-themed personal portfolio built to showcase my projects, skills, and experience as a Full Stack (MERN) Developer.
 
-🔗 **Live site:** _add your Render URL here once deployed_
+🔗 **Live site:** _https://portfolio-llsr.onrender.com_
 👤 **GitHub:** [github.com/Nisha-pr](https://github.com/Nisha-pr)
 💼 **LinkedIn:** [linkedin.com/in/nisha-3496b0269](https://www.linkedin.com/in/nisha-3496b0269/)
 
